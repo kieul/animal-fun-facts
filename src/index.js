@@ -1,17 +1,42 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import { animals } from "./animals";
+import React from "react";
+import ReactDOM from "react-dom";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+const title = "";
+const showBackground = true;
+const background = (
+  <img className="background" alt="ocean" src="/images/ocean.jpg" />
+);
+const images = [];
+
+for (const animal of Object.keys(animals)) {
+  images.push(
+    <img
+      onClick={displayFact}
+      key={animal}
+      className="animal"
+      alt={animal}
+      src={animals[animal].image}
+      aria-label={animal}
+      role="button"
+    />
+  );
+}
+
+const animalFacts = (
+  <div>
+    <h1>{title === "" ? "Click an animal for a fun fact" : title}</h1>
+    {showBackground && background}
+    <div className="animals">{images}</div>
+    <p id="fact"></p>
+  </div>
 );
 
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+function displayFact(e) {
+  const animalName = e.target.alt;
+  const randomIndex = Math.floor(Math.random() * 3);
+  const funFact = animals[animalName].facts[randomIndex];
+  const factElement = document.getElementById("fact");
+  factElement.innerHTML = funFact;
+}
+ReactDOM.render(animalFacts, document.getElementById("root"));
